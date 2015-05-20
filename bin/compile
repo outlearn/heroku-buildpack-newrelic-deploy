@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 
-env_dir=$3
-whitelist_regex=${2:-'^(NEW_RELIC_API_KEY|NEW_RELIC_APP_NAME)$'}
-if [ -d "$env_dir" ]; then
-  for e in $(ls $env_dir); do
-    echo "$e" | grep -E "$whitelist_regex" &&
-    export "$e=$(cat $env_dir/$e)"
-    :
-  done
-fi
+set -eo pipefail
 
-# We record the release
-echo "Sending deployment notice to NewRelic for \"$NEW_RELIC_APP_NAME\""
-curl -H "x-api-key:$NEW_RELIC_API_KEY" -d "deployment[app_name]=$NEW_RELIC_APP_NAME" https://api.newrelic.com/deployments.xml
+# Heroku has opinions on indentation, let's respect them
+indent() {
+  sed 's/^/       /'
+}
+
+BUILD_DIR=$1  # -> temp dir that contains whatever is in the git repo
+CACHE_DIR=$2  # -> use this dir for caching between compiles
+ENV_DIR=$3  # -> environment variables are stored as files inside here
+
+echo "-----> Read NEW_RELIC_API_KEY and NEW_RELIC_APP_NAME from env vars"
+if [[ -f $ENV_DIR/NEW_RELIC_API_KEY && -f $ENV_DIR/NEW_RELIC_APP_NAME ]]; then
+    export "NEW_RELIC_API_KEY=$(cat $ENV_DIR/NEW_RELIC_API_KEY)"
+    export "NEW_RELIC_APP_NAME=$(cat $ENV_DIR/NEW_RELIC_APP_NAME)"
+    echo "Sending deployment notice to NewRelic for $NEW_RELIC_APP_NAME" | indent
+    # We record the release
+    curl -H "x-api-key:$NEW_RELIC_API_KEY" -d "deployment[app_name]=$NEW_RELIC_APP_NAME" https://api.newrelic.com/deployments.xml
+else
+    echo "WARNING: Not recording deploy, required NewRelic variables not found." | indent
+fi
