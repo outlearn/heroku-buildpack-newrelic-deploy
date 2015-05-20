@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Nothing happens here.  The release script does the recording of deployments.
+
+# In theory, more custom work could happen here later on.
