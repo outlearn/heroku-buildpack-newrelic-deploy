@@ -15,4 +15,5 @@ export_env_dir() {
 export_env_dir
 
 # We record the release
+echo "Sending deployment notice to NewRelic for \"$NEW_RELIC_APP_NAME\""
 curl -H "x-api-key:$NEW_RELIC_API_KEY" -d "deployment[app_name]=$NEW_RELIC_APP_NAME" https://api.newrelic.com/deployments.xml
