@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+curl -H "x-api-key:$NEW_RELIC_API_KEY" -d "deployment[app_name]=$NEW_RELIC_APP_NAME" https://api.newrelic.com/deployments.xml
