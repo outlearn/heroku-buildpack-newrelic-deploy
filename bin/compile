@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo "In Compile"
-
 export_env_dir() {
   env_dir=$3
   whitelist_regex=${2:-'^(NEW_RELIC_API_KEY|NEW_RELIC_APP_NAME)$'}
@@ -17,4 +15,4 @@ export_env_dir() {
 export_env_dir()
 
 # We record the release
-curl -H "x-api-key:$NEW_RELIC_API_KEY" -d "deployment[app_name]=$NEW_RELIC_APP_NAME" https://api.newrelic.com/deployments.xml
+echo 'curl -H "x-api-key:$NEW_RELIC_API_KEY" -d "deployment[app_name]=$NEW_RELIC_APP_NAME" https://api.newrelic.com/deployments.xml'
