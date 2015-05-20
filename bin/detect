@@ -1,7 +1,3 @@
 #!/usr/bin/env bash
 
-echo "In Detect";
-
-# This should always run, as it's a custom Outlearn private build pack
-# The detect script returns 0 if it's applicable and should continue running
 exit 0
