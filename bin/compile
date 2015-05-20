@@ -2,9 +2,11 @@
 
 export_env_dir() {
   env_dir=$3
+  echo $env_dir
   whitelist_regex=${2:-'^(NEW_RELIC_API_KEY|NEW_RELIC_APP_NAME)$'}
   if [ -d "$env_dir" ]; then
     for e in $(ls $env_dir); do
+      echo "$e"
       echo "$e" | grep -E "$whitelist_regex" &&
       export "$e=$(cat $env_dir/$e)"
       :
